@@ -32,7 +32,7 @@ struct ContentView: View {
                     NavigationLink(destination: Text(activity.description)) {
                         Text(activity.title)
                     }
-                }
+                }.onDelete(perform: removeItems)
                 
             }.navigationTitle("My activities")
                 .toolbar {
@@ -44,6 +44,9 @@ struct ContentView: View {
             // AddActivity(activities: activities)
          }
     }
+    func removeItems(at offsets: IndexSet) {
+        activities.activity.remove(atOffsets: offsets)
+       }
 }
 
 #Preview {
