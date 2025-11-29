@@ -29,8 +29,8 @@ struct ContentView: View {
     var body: some View {
         NavigationStack {
             List {
-                ForEach (activities.activity) { activity in
-                    NavigationLink(destination: Text(activity.description)) {
+                ForEach ($activities.activity) { $activity in
+                    NavigationLink(destination: ActivityDetail(activity: $activity)) {
                         Text(activity.title)
                     }
                 }.onDelete(perform: removeItems)
