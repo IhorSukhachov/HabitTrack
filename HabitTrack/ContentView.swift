@@ -7,16 +7,47 @@
 
 import SwiftUI
 
-struct Activity: Identifiable {
+struct Activity: Identifiable, Codable {
     let id = UUID()
     let title: String
     var description: String
     var completionCount: Int = 0
+    
+    init(id: UUID = UUID(), title: String, description: String, completionCount: Int = 0) {
+            self.title = title
+            self.description = description
+            self.completionCount = completionCount
+        }
 }
 
 @Observable
-class Activities  {
-    var activity = [Activity]()
+class Activities {
+    var activity = [Activity]() {
+        didSet {
+            save()
+        }
+    }
+    
+    let saveKey = "ActivitiesData"
+    
+    init() {
+        load()
+    }
+    
+    // Save to UserDefaults
+    func save() {
+        if let encoded = try? JSONEncoder().encode(activity) {
+            UserDefaults.standard.set(encoded, forKey: saveKey)
+        }
+    }
+    
+    // Load from UserDefaults
+    func load() {
+        if let savedData = UserDefaults.standard.data(forKey: saveKey),
+           let decoded = try? JSONDecoder().decode([Activity].self, from: savedData) {
+            activity = decoded
+        }
+    }
 }
 
 
