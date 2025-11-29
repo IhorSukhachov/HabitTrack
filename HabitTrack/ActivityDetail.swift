@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct ActivityDetailView: View {
+struct ActivityDetail: View {
     @Binding var activity: Activity
 
     var body: some View {
@@ -37,5 +37,13 @@ struct ActivityDetailView: View {
 }
 
 #Preview {
-    //
+    ActivityDetail(
+        activity: .constant(
+            Activity(
+                title: "Test Activity",
+                description: "Just testing preview",
+                completionCount: 5
+            )
+        )
+    )
 }
