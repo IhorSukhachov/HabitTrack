@@ -10,66 +10,45 @@ import SwiftUI
 struct Activity: Identifiable {
     let id = UUID()
     let title: String
-    let description: String
+    var description: String
 }
 
+@Observable
+class Activities  {
+    var activity = [Activity]()
+}
+
+
+
 struct ContentView: View {
-    @State private var activities: [Activity] = []
+    @State private var activities = Activities()
     @State private var showingAdd = false
+    
     
     var body: some View {
         NavigationStack {
-            List(activities) { activity in
-                Text(activity.title)
-            }
-            .navigationTitle("Habits")
-            .toolbar {
-                ToolbarItem(placement: .primaryAction) {
-                    Button {
+            List {
+                ForEach (activities.activity) { activity in
+                    NavigationLink(destination: Text(activity.description)) {
+                        Text(activity.title)
+                    }
+                }
+                
+            }.navigationTitle("My activities")
+                .toolbar {
+                    Button("Add Activity", systemImage: "plus") {
                         showingAdd = true
-                    } label: {
-                        Image(systemName: "plus")
                     }
                 }
-            }
-            .sheet(isPresented: $showingAdd) {
-                AddActivityView { title, description in
-                    let new = Activity(title: title, description: description)
-                    activities.append(new)
-                    showingAdd = false
-                }
-            }
-        }
-    }
-}
-
-struct AddActivityView: View {
-    @State private var title = ""
-    @State private var description = ""
-    var onSave: (String, String) -> Void
-
-    var body: some View {
-        NavigationStack {
-            Form {
-                TextField("Title", text: $title)
-                TextField("Description", text: $description)
-            }
-            .navigationTitle("Add Activity")
-            .toolbar {
-                ToolbarItem(placement: .cancellationAction) {
-                    Button("Cancel") { UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil) }
-                }
-                ToolbarItem(placement: .confirmationAction) {
-                    Button("Save") {
-                        guard !title.trimmingCharacters(in: .whitespaces).isEmpty else { return }
-                        onSave(title, description)
-                    }
-                }
-            }
-        }
+        }.sheet(isPresented: $showingAdd) {
+            // AddActivity(activities: activities)
+         }
     }
 }
 
 #Preview {
     ContentView()
 }
+
+
+        
