@@ -41,7 +41,7 @@ struct ContentView: View {
                     }
                 }
         }.sheet(isPresented: $showingAdd) {
-             AddActivity(activities: Activities())
+             AddActivity(activities: activities)
          }
     }
     func removeItems(at offsets: IndexSet) {

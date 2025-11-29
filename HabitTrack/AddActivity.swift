@@ -8,12 +8,14 @@
 import SwiftUI
 
 struct AddActivity: View {
+    @Environment(\.dismiss) var dismiss
     @State private var title = ""
     @State private var description = ""
-    @Environment(\.dismiss) var dismiss
+    
     var activities: Activities
-  
+    
     var body: some View {
+       
         NavigationStack {
             Form {
                 TextField("Title", text: $title)
@@ -22,20 +24,23 @@ struct AddActivity: View {
             .navigationTitle("Add Activity")
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
-                    Button("Cancel") { UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil) }
+                    Button("Cancel") {
+                        dismiss()
+                    }
                 }
-                ToolbarItem(placement: .confirmationAction) {
-                    Button("Save") {
-                        let item = Activity(title: title, description: description)
-                        activities.activity.append(item)
+                    ToolbarItem(placement: .confirmationAction) {
+                        Button("Save") {
+                            let item = Activity(title: title, description: description)
+                            activities.activity.append(item)
+                            dismiss()
                             
+                        }
                     }
                 }
             }
         }
-    }
+    
 }
-
 #Preview {
     AddActivity(activities: Activities())
 }
