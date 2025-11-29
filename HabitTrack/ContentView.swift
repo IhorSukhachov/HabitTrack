@@ -14,12 +14,34 @@ struct Activity: Identifiable {
 }
 
 struct ContentView: View {
+    @State private var activities: [Activity] = []
+    @State private var showingAdd = false
+    
     var body: some View {
-    
-    
+        NavigationStack {
+            List(activities) { activity in
+                Text(activity.title)
+            }
+            .navigationTitle("Habits")
+            .toolbar {
+                ToolbarItem(placement: .primaryAction) {
+                    Button {
+                        showingAdd = true
+                    } label: {
+                        Image(systemName: "plus")
+                    }
+                }
+            }
+            .sheet(isPresented: $showingAdd) {
+//                AddActivityView { title, description in
+//                    let new = Activity(title: title, description: description)
+//                    activities.append(new)
+//                    showingAdd = false
+ //               }
+            }
+        }
     }
 }
-
 #Preview {
     ContentView()
 }
