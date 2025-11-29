@@ -33,15 +33,43 @@ struct ContentView: View {
                 }
             }
             .sheet(isPresented: $showingAdd) {
-//                AddActivityView { title, description in
-//                    let new = Activity(title: title, description: description)
-//                    activities.append(new)
-//                    showingAdd = false
- //               }
+                AddActivityView { title, description in
+                    let new = Activity(title: title, description: description)
+                    activities.append(new)
+                    showingAdd = false
+                }
             }
         }
     }
 }
+
+struct AddActivityView: View {
+    @State private var title = ""
+    @State private var description = ""
+    var onSave: (String, String) -> Void
+
+    var body: some View {
+        NavigationStack {
+            Form {
+                TextField("Title", text: $title)
+                TextField("Description", text: $description)
+            }
+            .navigationTitle("Add Activity")
+            .toolbar {
+                ToolbarItem(placement: .cancellationAction) {
+                    Button("Cancel") { UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil) }
+                }
+                ToolbarItem(placement: .confirmationAction) {
+                    Button("Save") {
+                        guard !title.trimmingCharacters(in: .whitespaces).isEmpty else { return }
+                        onSave(title, description)
+                    }
+                }
+            }
+        }
+    }
+}
+
 #Preview {
     ContentView()
 }
