@@ -7,12 +7,35 @@
 
 import SwiftUI
 
-struct ActivityDetail: View {
+struct ActivityDetailView: View {
+    @Binding var activity: Activity
+
     var body: some View {
-        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
+        VStack(spacing: 20) {
+            Text(activity.description)
+                .font(.body)
+                .padding()
+
+            Text("Completed: \(activity.completionCount)")
+                .font(.title2)
+
+            Button {
+                activity.completionCount += 1
+            } label: {
+                Label("Mark Complete", systemImage: "checkmark.circle.fill")
+                    .font(.title3)
+                    .padding()
+                    .frame(maxWidth: .infinity)
+                    .background(.regularMaterial)
+                    .clipShape(RoundedRectangle(cornerRadius: 10))
+            }
+            Spacer()
+        }
+        .padding()
+        .navigationTitle(activity.title)
     }
 }
 
 #Preview {
-    ActivityDetail()
+    //
 }
